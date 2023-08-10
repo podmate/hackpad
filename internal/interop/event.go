@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package interop
@@ -21,17 +22,8 @@ func NewEventTarget() EventTarget {
 }
 
 type Event struct {
-	Target          js.Value
-	Type            string
-	stopPropagation bool
-}
-
-func (e Event) StopPropagation() {
-	e.stopPropagation = true
-}
-
-func (e Event) Stopped() bool {
-	return e.stopPropagation
+	Target js.Value
+	Type   string
 }
 
 type eventTarget struct {

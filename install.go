@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package main
@@ -25,7 +26,7 @@ func installFunc(this js.Value, args []js.Value) interface{} {
 		}
 		resolve(nil)
 	}()
-	return prom
+	return prom.JSValue()
 }
 
 func install(args []js.Value) error {

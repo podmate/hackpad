@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package interop
@@ -68,8 +69,8 @@ func setFuncHandler(name string, fn interface{}, args []js.Value) (returnedVal i
 			}()
 
 			ret, err = fn(args)
-			err = wrapAsJSError(err, name, args...)
-			ret = append([]interface{}{err}, ret...)
+			errValue := wrapAsJSError(err, name, args...)
+			ret = append([]interface{}{errValue}, ret...)
 			callback.Invoke(ret...)
 		}()
 		return nil

@@ -1,9 +1,9 @@
+//go:build js
 // +build js
 
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"syscall/js"
 
@@ -13,19 +13,20 @@ import (
 )
 
 // editorJSFunc is a JS function that opens on a JS element and returns a JS object with the following spec:
-// {
-//   getContents() string
-//   setContents(string)
-//   getCursorIndex() int
-//   setCursorIndex(int)
-// }
+//
+//	{
+//	  getContents() string
+//	  setContents(string)
+//	  getCursorIndex() int
+//	  setCursorIndex(int)
+//	}
 type editorJSFunc js.Value
 
 func (e editorJSFunc) New(elem *dom.Element) ide.Editor {
 	editor := &jsEditor{
 		titleChan: make(chan string, 1),
 	}
-	editor.elem = js.Value(e).Invoke(elem, js.FuncOf(editor.onEdit))
+	editor.elem = js.Value(e).Invoke(elem.JSValue(), js.FuncOf(editor.onEdit))
 	return editor
 }
 
@@ -43,7 +44,7 @@ func (j *jsEditor) onEdit(js.Value, []js.Value) interface{} {
 		if err == nil {
 			perm = info.Mode()
 		}
-		err = ioutil.WriteFile(j.filePath, []byte(contents), perm)
+		err = os.WriteFile(j.filePath, []byte(contents), perm)
 		if err != nil {
 			log.Error("Failed to write file contents: ", err)
 		}
@@ -62,7 +63,7 @@ func (j *jsEditor) CurrentFile() string {
 }
 
 func (j *jsEditor) ReloadFile() error {
-	contents, err := ioutil.ReadFile(j.filePath)
+	contents, err := os.ReadFile(j.filePath)
 	if err != nil {
 		return err
 	}

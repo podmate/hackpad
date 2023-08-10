@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package process
@@ -26,8 +27,8 @@ func Init() {
 	interop.SetFunc(jsProcess, "getgid", getegid)
 	interop.SetFunc(jsProcess, "getegid", getegid)
 	interop.SetFunc(jsProcess, "getgroups", getgroups)
-	jsProcess.Set("pid", currentProcess.PID())
-	jsProcess.Set("ppid", currentProcess.ParentPID())
+	jsProcess.Set("pid", currentProcess.PID().JSValue())
+	jsProcess.Set("ppid", currentProcess.ParentPID().JSValue())
 	interop.SetFunc(jsProcess, "umask", umask)
 	interop.SetFunc(jsProcess, "cwd", cwd)
 	interop.SetFunc(jsProcess, "chdir", chdir)
@@ -35,14 +36,14 @@ func Init() {
 	globals.Set("child_process", map[string]interface{}{})
 	childProcess := globals.Get("child_process")
 	interop.SetFunc(childProcess, "spawn", spawn)
-	//interop.SetFunc(childProcess, "spawnSync", spawnSync) // TODO is there any way to run spawnSync so we don't hit deadlock?
+	// interop.SetFunc(childProcess, "spawnSync", spawnSync) // TODO is there any way to run spawnSync so we don't hit deadlock?
 	interop.SetFunc(childProcess, "wait", wait)
 	interop.SetFunc(childProcess, "waitSync", waitSync)
 }
 
 func switchedContext(pid, ppid process.PID) {
-	jsProcess.Set("pid", pid)
-	jsProcess.Set("ppid", ppid)
+	jsProcess.Set("pid", pid.JSValue())
+	jsProcess.Set("ppid", ppid.JSValue())
 }
 
 func Dump() interface{} {

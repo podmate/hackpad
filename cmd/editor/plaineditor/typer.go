@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package plaineditor
@@ -42,7 +43,7 @@ func handleKeydown(event js.Value) {
 	selectionEnd := target.Get("selectionEnd").Int()
 	key := event.Get("key").String()
 	code := event.Get("code").String()
-	//metaKey := event.Get("metaKey").Bool()
+	// metaKey := event.Get("metaKey").Bool()
 
 	preventDefault := func() {
 		event.Call("preventDefault")
@@ -59,11 +60,11 @@ func handleKeydown(event js.Value) {
 
 	if code == KeyEnter {
 		// TODO restore cmd+enter triggering run button
-		//if metaKey {
-		//preventDefault()
-		//runPlayground()
-		//return
-		//}
+		// if metaKey {
+		//     preventDefault()
+		//     runPlayground()
+		//     return
+		// }
 
 		lastNewLine := strings.LastIndexByte(slice(text, 0, selectionStart), '\n')
 		if lastNewLine != -1 {

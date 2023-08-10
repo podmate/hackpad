@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package interop
@@ -18,8 +19,8 @@ func ProfileJS(this js.Value, args []js.Value) interface{} {
 	go func() {
 		MemoryProfileJS(this, args)
 		// Re-enable once these profiles actually work in the browser. Currently produces 0 samples.
-		//TraceProfileJS(this, args)
-		//StartCPUProfileJS(this, args)
+		// TraceProfileJS(this, args)
+		// StartCPUProfileJS(this, args)
 	}()
 	return nil
 }

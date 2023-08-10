@@ -1,3 +1,4 @@
+//go:build js
 // +build js
 
 package fs
@@ -31,5 +32,5 @@ func openSync(args []js.Value) (interface{}, error) {
 
 	p := process.Current()
 	fd, err := p.Files().Open(path, flags, mode)
-	return fd, err
+	return fd.JSValue(), err
 }
